@@ -1,0 +1,17 @@
+version: "3.8"
+
+networks:
+    acme:
+      name: acme
+      ipam:
+          driver: default
+          config: [{subnet: 172.28.98.1/26}]
+
+services:
+    acme:
+        container_name: acme
+        build: ./image
+        image: acme
+        volumes: [{type: bind, source: ./../application, target: /application}]
+        networks: {acme: {ipv4_address: 172.28.98.2}}
+        restart: unless-stopped
