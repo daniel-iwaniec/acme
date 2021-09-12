@@ -25,18 +25,19 @@ final class Basket
 
     public function add(ProductCode $code): void
     {
-        $this->products->add($this->productCatalog->getProduct($code));
+        $this->products->add(product: $this->productCatalog->getProduct($code));
     }
 
     public function calculateTotal(): Money
     {
-        $total = new Money('0', isNull: true);
-
+        $totals = [];
         foreach ($this->offers as $offer) {
-            $offerTotal = $offer->calculate($this->products);
-            if ($offerTotal->isLess($total) || $total->isNull()) {
-                $total = $offerTotal;
-            }
+            $totals[] = $offer->calculate($this->products);
+        }
+
+        $total = min($totals);
+        if ($total === false) {
+            $total = new Money();
         }
 
         $deliveryCost = $this->delivery->calculate($total);

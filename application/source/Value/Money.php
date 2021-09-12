@@ -11,10 +11,8 @@ final class Money
     /**
      * @throws InvalidMoney
      */
-    public function __construct(
-        private string $amount = '0',
-        private bool $isNull = false,
-    ) {
+    public function __construct(private string $amount = '0')
+    {
         if ($this->amount < 0) {
             throw InvalidMoney::negativeValue($amount);
         }
@@ -38,11 +36,6 @@ final class Money
     public function isLess(Money $money): bool
     {
         return bccomp($this->amount, $money->amount) === -1;
-    }
-
-    public function isNull(): bool
-    {
-        return $this->isNull;
     }
 
     public function __toString(): string
